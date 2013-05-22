@@ -20,6 +20,7 @@ import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
 import com.stackmob.core.rest.ResponseToProcess;
 import com.stackmob.sdkapi.SDKServiceProvider;
+import com.stackmob.sdkapi.LoggerService;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class HelloWorld implements CustomCodeMethod {
   public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("msg", "Hello, world!");
-    LoggerService logger = provider.getLoggerService(MyCustomCodeMethod.class);
+    LoggerService logger = provider.getLoggerService(HelloWorld.class);
     logger.debug("in hello world for customcode");
     return new ResponseToProcess(HttpURLConnection.HTTP_OK, map);
   }
