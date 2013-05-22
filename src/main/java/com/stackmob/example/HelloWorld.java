@@ -20,7 +20,7 @@ import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
 import com.stackmob.core.rest.ResponseToProcess;
 import com.stackmob.sdkapi.SDKServiceProvider;
-import com.stackmob.sdkapi.LoggerService;
+import com.stackmob.sdkapi.*;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
