@@ -61,9 +61,9 @@ public class QueryByField implements CustomCodeMethod {
     List<SMObject> results;
 
     try {
-      // Create a query condition to match all car objects to the `sid` that was passed in
+      // Create a query condition to match all photo objects to the `sid` that was passed in
       query.add(new SMEquals("story_id", new SMString(sid)));
-      results = ds.readObjects("stories", query);
+      results = ds.readObjects("photos", query);
 
       if (results != null && results.size() > 0) {
         feedback.put(sid, results);
