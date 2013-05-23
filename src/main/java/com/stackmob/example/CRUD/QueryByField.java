@@ -30,8 +30,8 @@ import java.util.*;
 
 /**
  * This example will show a user how to write a custom code method
- * with one parameter `make` that queries the `car` schema for all objects
- * that match the given make field
+ * with one parameter `sid` that queries the `photos` schema for all objects
+ * that match the given story_id field
  */
 
 public class QueryByField implements CustomCodeMethod {
@@ -43,7 +43,7 @@ public class QueryByField implements CustomCodeMethod {
 
   @Override
   public List<String> getParams() {
-    return Arrays.asList("make");
+    return Arrays.asList("sid");
   }
 
   @Override
@@ -51,8 +51,8 @@ public class QueryByField implements CustomCodeMethod {
     Map<String, List<SMObject>> feedback = new HashMap<String, List<SMObject>>();
     Map<String, String> errMap = new HashMap<String, String>();
 
-    String make = request.getParams().get("make");
-    if (Util.hasNulls(make)){
+    String sid = request.getParams().get("sid");
+    if (Util.hasNulls(sid)){
       return Util.badRequestResponse(errMap);
     }
 
@@ -61,12 +61,12 @@ public class QueryByField implements CustomCodeMethod {
     List<SMObject> results;
 
     try {
-      // Create a query condition to match all car objects to the `make` that was passed in
-      query.add(new SMEquals("make", new SMString(make)));
-      results = ds.readObjects("car", query);
+      // Create a query condition to match all car objects to the `sid` that was passed in
+      query.add(new SMEquals("story_id", new SMString(sid)));
+      results = ds.readObjects("stories", query);
 
       if (results != null && results.size() > 0) {
-        feedback.put(make, results);
+        feedback.put(sid, results);
       }
 
     } catch (InvalidSchemaException ise) {
