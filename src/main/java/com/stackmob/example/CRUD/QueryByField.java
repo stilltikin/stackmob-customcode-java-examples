@@ -118,7 +118,7 @@ public class QueryByField implements CustomCodeMethod {
 			if (results != null && results.size() > 0) {
 				feedback.put("user", results);
 			} else {
-				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid), errMap);	// http 500 - internal server error
+				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
 
 			// Create a query condition to match all photo objects to the `sid` that was passed in
