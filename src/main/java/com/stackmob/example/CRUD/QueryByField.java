@@ -108,7 +108,7 @@ public class QueryByField implements CustomCodeMethod {
 
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
 			s_query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo"));
+			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "photoCount"));
 			
 			if (results != null && results.size() > 0) {
 				feedback.put("story", results);
