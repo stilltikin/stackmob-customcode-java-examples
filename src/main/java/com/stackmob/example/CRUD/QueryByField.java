@@ -86,8 +86,8 @@ public class QueryByField implements CustomCodeMethod {
 			end = -1;
 		}
 
-		feedback.put("start", start);
-		feedback.put("end", end);
+		feedback.put("start", Arrays.asList(start));
+		feedback.put("end", Arrays.asList(end));
 
 		
 		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
