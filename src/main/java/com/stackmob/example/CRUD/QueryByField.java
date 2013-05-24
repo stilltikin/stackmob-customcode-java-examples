@@ -86,8 +86,11 @@ public class QueryByField implements CustomCodeMethod {
 			end = -1;
 		}
 
+		List<SMObject> results;
+		results.put(String.valueOf(start));
 		feedback.put("start", String.valueOf(start));
-		feedback.put("end", String.valueOf(end));
+		results.put(String.valueOf(end));
+		feedback.put("end", results);
 		
 		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
 		List<String> qfields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
@@ -96,7 +99,7 @@ public class QueryByField implements CustomCodeMethod {
 	
 		List<SMCondition> query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
-		List<SMObject> results;
+		//List<SMObject> results;
 		
 		try {
 			// Create a query condition to match all photo objects to the `sid` that was passed in
