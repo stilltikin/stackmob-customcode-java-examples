@@ -86,6 +86,9 @@ public class QueryByField implements CustomCodeMethod {
 			end = -1;
 		}
 
+		feedback.put("start", start);
+		feedback.put("end", end);
+
 		
 		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
 		List<String> qfields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
