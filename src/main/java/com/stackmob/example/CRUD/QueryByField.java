@@ -56,10 +56,11 @@ public class QueryByField implements CustomCodeMethod {
 			return Util.badRequestResponse(errMap);
 		}
 		
+		long start;
 		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(val)) {
 			try {
-				long start = Long.valueOf(val).longValue();
+				start = Long.valueOf(val).longValue();
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid start value", nfe, errMap);	// http 500 - internal server error
 			}
@@ -67,13 +68,14 @@ public class QueryByField implements CustomCodeMethod {
 				start = 0;
 			}
 		} else {
-			long start = 0;
+			start = 0;
 		}
 		
+		long end;
 		val = request.getParams().get("end");  // get photo end (optional)
 		if (!Util.hasNulls(val)) {
 			try {
-				long end = Long.valueOf(val).longValue();
+				end = Long.valueOf(val).longValue();
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid end value", nfe, errMap);	// http 500 - internal server error
 			}
@@ -81,7 +83,7 @@ public class QueryByField implements CustomCodeMethod {
 				end = -1;
 			}
 		} else {
-			long end = -1;
+			end = -1;
 		}
 
 		
