@@ -105,7 +105,7 @@ public class QueryByField implements CustomCodeMethod {
 			String userid;
 			if (results != null && results.size() > 0) {
 				feedback.put("story", results);
-				userid = (results[0]).getValue().get("sm_owner");
+				userid = results.get(0).getValue().get("sm_owner");
 			} else {
 				return Util.internalErrorResponse("no matching story", null, errMap);	// http 500 - internal server error
 			}
