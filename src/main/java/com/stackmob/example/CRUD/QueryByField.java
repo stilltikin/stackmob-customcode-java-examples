@@ -50,12 +50,12 @@ public class QueryByField implements CustomCodeMethod {
 	public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
 		Map<String, List<SMObject>> feedback = new HashMap<String, List<SMObject>>();
 		Map<String, String> errMap = new HashMap<String, String>();
-		
+
 		String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
-		
+
 		long start;
 		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(val)) {
@@ -70,7 +70,7 @@ public class QueryByField implements CustomCodeMethod {
 		} else {
 			start = 0;
 		}
-		
+
 		long end;
 		val = request.getParams().get("end");  // get photo end (optional)
 		if (!Util.hasNulls(val)) {
@@ -86,38 +86,38 @@ public class QueryByField implements CustomCodeMethod {
 			end = -1;
 		}
 
-		List<SMObject> results;
-		results.put(new SMObject("", String.valueOf(start)));
-		feedback.put("start", results);
-		results.put(new SMObject("", )String.valueOf(end)));
-		feedback.put("end", results);
-		
-		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
-		List<String> qfields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
+		List<SMOrdering> p_order = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
+		List<String> p_fields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
 
-		ResultFilters resultFilter = new ResultFilters(start, end, qorder, qfields);
-	
-		List<SMCondition> query = new ArrayList<SMCondition>();
+		ResultFilters resultFilter = new ResultFilters(start, end, p_order, p_fields);
+
+		List<SMCondition> p_query = new ArrayList<SMCondition>();
+		List<SMCondition> s_query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
-		//List<SMObject> results;
-		
+		List<SMObject> results;
+
 		try {
 			// Create a query condition to match all photo objects to the `sid` that was passed in
-			query.add(new SMEquals("story_id", new SMString(sid)));
-			query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("photos", query, 0, resultFilter);
-			
+			p_query.add(new SMEquals("story_id", new SMString(sid)));
+			p_query.add(new SMNotEqual("state", new SMString("D")));
+			results = ds.readObjects("photos", p_query, 0, resultFilter);
+
 			if (results != null && results.size() > 0) {
-				feedback.put(sid, results);
+				feedback.put("photos", results);
 			}
-			
+
+			s_query.add(new SMEquals("stories_id", new SMString(sid)));
+			s_query.add(new SMNotEqual("state", new SMString("D")));
+			results = ds.readObjects("stories", s_query, new asList("last_updated", "name", "desc", "photo", "photoCount"));
+			if (results != null && results.size() > 0) {
+				feedback.put("story", results);
+			}
 		} catch (InvalidSchemaException ise) {
 			return Util.internalErrorResponse("invalid_schema", ise, errMap);	// http 500 - internal server error
 		} catch (DatastoreException dse) {
 			return Util.internalErrorResponse("datastore_exception", dse, errMap);	// http 500 - internal server error
 		}
-		
+
 		return new ResponseToProcess(HttpURLConnection.HTTP_OK, feedback);
 	}
-
 }
