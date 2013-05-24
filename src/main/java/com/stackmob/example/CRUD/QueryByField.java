@@ -93,6 +93,7 @@ public class QueryByField implements CustomCodeMethod {
 
 		List<SMCondition> p_query = new ArrayList<SMCondition>();
 		List<SMCondition> s_query = new ArrayList<SMCondition>();
+		List<SMCondition> u_query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
 		List<SMObject> results;
 
@@ -107,9 +108,19 @@ public class QueryByField implements CustomCodeMethod {
 				feedback.put("story", results);
 				userid = (SMString) results.get(0).getValue().get("sm_owner");
 			} else {
-				return Util.internalErrorResponse("no matching story", null, errMap);	// http 500 - internal server error
+				return Util.internalErrorResponse("no matching story", new DatastoreException(""), errMap);	// http 500 - internal server error
 			}
+
+			// get user info
+			u_query.add(new SMEquals("sm_owner", userid));
+			results = ds.readObjects("user", s_query, Arrays.asList("username"));
 			
+			if (results != null && results.size() > 0) {
+				feedback.put("user", results);
+			} else {
+				return Util.internalErrorResponse("no matching user for story", null, errMap);	// http 500 - internal server error
+			}
+
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			p_query.add(new SMEquals("story_id", new SMString(sid)));
 			p_query.add(new SMNotEqual("state", new SMString("D")));
