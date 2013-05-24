@@ -100,7 +100,7 @@ public class QueryByField implements CustomCodeMethod {
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			query.add(new SMEquals("story_id", new SMString(sid)));
 			query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("photos", query, 0);//, resultFilter);
+			results = ds.readObjects("photos", query, 0, resultFilter);
 			
 			if (results != null && results.size() > 0) {
 				feedback.put(sid, results);
