@@ -90,7 +90,7 @@ public class QueryByField implements CustomCodeMethod {
 		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
 		List<String> qfields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
 
-//		ResultFilters resultFilter = new ResultFilters(start, end, qorder, qfields);
+		ResultFilters resultFilter = new ResultFilters(start, end, qorder, qfields);
 	
 		List<SMCondition> query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
