@@ -51,23 +51,43 @@ public class QueryByField implements CustomCodeMethod {
 		Map<String, List<SMObject>> feedback = new HashMap<String, List<SMObject>>();
 		Map<String, String> errMap = new HashMap<String, String>();
 		
-		String sid = request.getParams().get("sid");
+		String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
-		String val = request.getParams().get("start");
+		
+		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(val)){
 			try {
 				long start = Long.valueOf(val).longValue();
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid start value", nfe, errMap);	// http 500 - internal server error
 			}
+			if(start < 0) {
+				start = 0;
+			}
 		} else {
 			long start = 0;
 		}
-		val = request.getParams().get("end");
+		
+		val = request.getParams().get("end");  // get photo end (optional)
+		if (!Util.hasNulls(val)){
+			try {
+				long end = Long.valueOf(val).longValue();
+			} catch(NumberFormatException nfe) {
+				return Util.internalErrorResponse("invalid end value", nfe, errMap);	// http 500 - internal server error
+			}
+			if(end < 1) {
+				end = -1;
+			}
+		} else {
+			long end = -1;
+		}
 
-		//resultFilter
+		
+		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
+		List<String> fields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
+		ResultFilters resultFilter(start, end, qorder, fields);
 		List<SMCondition> query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
 		List<SMObject> results;
@@ -76,7 +96,7 @@ public class QueryByField implements CustomCodeMethod {
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			query.add(new SMEquals("story_id", new SMString(sid)));
 			query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("photos", query);
+			results = ds.readObjects("photos", query, 0, resultFilter);
 			
 			if (results != null && results.size() > 0) {
 				feedback.put(sid, results);
