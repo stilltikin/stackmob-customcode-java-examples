@@ -88,7 +88,7 @@ public class QueryByField implements CustomCodeMethod {
 
 		List<SMObject> results;
 		results.put(String.valueOf(start));
-		feedback.put("start", String.valueOf(start));
+		feedback.put("start", results);
 		results.put(String.valueOf(end));
 		feedback.put("end", results);
 		
