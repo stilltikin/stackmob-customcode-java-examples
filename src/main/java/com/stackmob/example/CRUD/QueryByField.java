@@ -102,10 +102,10 @@ public class QueryByField implements CustomCodeMethod {
 			s_query.add(new SMNotEqual("state", new SMString("D")));
 			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner"));
 			
-			String userid;
+			SMString userid;
 			if (results != null && results.size() > 0) {
 				feedback.put("story", results);
-				userid = results.get(0).getValue().get("sm_owner");
+				userid = (SMString) results.get(0).getValue().get("sm_owner");
 			} else {
 				return Util.internalErrorResponse("no matching story", null, errMap);	// http 500 - internal server error
 			}
