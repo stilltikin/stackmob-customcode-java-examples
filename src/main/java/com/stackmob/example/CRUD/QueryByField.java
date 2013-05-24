@@ -97,6 +97,19 @@ public class QueryByField implements CustomCodeMethod {
 		List<SMObject> results;
 
 		try {
+			// get story info TODO: can't get photoCount for some reason??
+			s_query.add(new SMEquals("stories_id", new SMString(sid)));
+			s_query.add(new SMNotEqual("state", new SMString("D")));
+			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner"));
+			
+			String userid;
+			if (results != null && results.size() > 0) {
+				feedback.put("story", results);
+				SMString = results[0].getValue().get("sm_user");
+			} else {
+				return Util.internalErrorResponse("no matching story", null, errMap);	// http 500 - internal server error
+			}
+			
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			p_query.add(new SMEquals("story_id", new SMString(sid)));
 			p_query.add(new SMNotEqual("state", new SMString("D")));
@@ -106,13 +119,6 @@ public class QueryByField implements CustomCodeMethod {
 				feedback.put("photos", results);
 			}
 
-			s_query.add(new SMEquals("stories_id", new SMString(sid)));
-			s_query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "photoCount", "name", "desc", "photo"));
-			
-			if (results != null && results.size() > 0) {
-				feedback.put("story", results);
-			}
 		} catch (InvalidSchemaException ise) {
 			return Util.internalErrorResponse("invalid_schema", ise, errMap);	// http 500 - internal server error
 		} catch (DatastoreException dse) {
