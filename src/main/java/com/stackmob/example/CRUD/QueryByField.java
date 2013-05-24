@@ -43,7 +43,7 @@ public class QueryByField implements CustomCodeMethod {
 
 	@Override
 	public List<String> getParams() {
-		return Arrays.asList("sid","start","end");
+		return Arrays.asList("sid", "start", "end");
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class QueryByField implements CustomCodeMethod {
 		}
 		
 		String val = request.getParams().get("start");  // get photo start offset (optional)
-		if (!Util.hasNulls(val)){
+		if (!Util.hasNulls(val)) {
 			try {
 				long start = Long.valueOf(val).longValue();
 			} catch(NumberFormatException nfe) {
@@ -71,7 +71,7 @@ public class QueryByField implements CustomCodeMethod {
 		}
 		
 		val = request.getParams().get("end");  // get photo end (optional)
-		if (!Util.hasNulls(val)){
+		if (!Util.hasNulls(val)) {
 			try {
 				long end = Long.valueOf(val).longValue();
 			} catch(NumberFormatException nfe) {
@@ -87,7 +87,9 @@ public class QueryByField implements CustomCodeMethod {
 		
 		List<SMOrdering> qorder = Arrays.asList(new SMOrdering("taken", OrderingDirection.DESCENDING));
 		List<String> fields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
+
 		ResultFilters resultFilter(start, end, qorder, fields);
+	
 		List<SMCondition> query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
 		List<SMObject> results;
