@@ -25,6 +25,10 @@ import com.stackmob.example.Util;
 import com.stackmob.sdkapi.SDKServiceProvider;
 import com.stackmob.sdkapi.*;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.net.HttpURLConnection;
 import java.util.*;
 
@@ -41,26 +45,40 @@ public class QueryByField implements CustomCodeMethod {
 		return "CRUD_Query_By_Field";
 	}
 
-	@Override
-	public List<String> getParams() {
-		return Arrays.asList("sid", "start", "end");
-	}
+//	@Override
+//	public List<String> getParams() {
+//		return Arrays.asList("sid", "start", "end");
+//	}
 
 	@Override
 	public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
 		Map<String, List<SMObject>> feedback = new HashMap<String, List<SMObject>>();
 		Map<String, String> errMap = new HashMap<String, String>();
 
-		String sid = request.getParams().get("sid"); // get story ID
+		JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(request.getBody());
+			JSONObject jsonObject = (JSONObject) obj;
+			
+			// Fetch the values passed in by the user from the body of JSON
+			String sid = (String) jsonObject.get("sid");
+			String startIn = (String) jsonObject.get("start");
+			String endIn = (String) jsonObject.get("end");
+		} catch (ParseException pe) {
+			logger.error(pe.getMessage(), pe);
+			return Util.badRequestResponse(errMap);
+		}
+		
+		//String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
 
 		long start;
-		String val = request.getParams().get("start");  // get photo start offset (optional)
-		if (!Util.hasNulls(val)) {
+//		String val = request.getParams().get("start");  // get photo start offset (optional)
+		if (!Util.hasNulls(startIn)) {
 			try {
-				start = Long.valueOf(val).longValue();
+				start = Long.valueOf(startIn).longValue();
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid start value", nfe, errMap);	// http 500 - internal server error
 			}
@@ -72,10 +90,10 @@ public class QueryByField implements CustomCodeMethod {
 		}
 
 		long end;
-		val = request.getParams().get("end");  // get photo end (optional)
-		if (!Util.hasNulls(val)) {
+//		val = request.getParams().get("end");  // get photo end (optional)
+		if (!Util.hasNulls(endIn)) {
 			try {
-				end = Long.valueOf(val).longValue();
+				end = Long.valueOf(endIn).longValue();
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid end value", nfe, errMap);	// http 500 - internal server error
 			}
