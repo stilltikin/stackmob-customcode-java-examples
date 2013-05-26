@@ -45,10 +45,10 @@ public class QueryByField implements CustomCodeMethod {
 		return "CRUD_Query_By_Field";
 	}
 
-//	@Override
-//	public List<String> getParams() {
-//		return Arrays.asList("sid", "start", "end");
-//	}
+	@Override
+	public List<String> getParams() {
+		return Arrays.asList("sid", "start", "end");
+	}
 
 	@Override
 	public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) {
