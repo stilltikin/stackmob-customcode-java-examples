@@ -79,7 +79,7 @@ public class QueryByField implements CustomCodeMethod {
 			} catch(NumberFormatException nfe) {
 				return Util.internalErrorResponse("invalid end value", nfe, errMap);	// http 500 - internal server error
 			}
-			if(end < 1) {
+			if(end < 0) {
 				end = -1;
 			}
 		} else {
