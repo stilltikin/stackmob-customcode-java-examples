@@ -69,7 +69,7 @@ public class QueryByField implements CustomCodeMethod {
 			startIn = (String) jsonObject.get("start");
 			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
-			logger.error(pe.getMessage(), pe);
+			//logger.error(pe.getMessage(), pe);
 			return Util.badRequestResponse(errMap);
 		}
 		
