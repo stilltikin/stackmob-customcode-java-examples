@@ -55,15 +55,19 @@ public class QueryByField implements CustomCodeMethod {
 		Map<String, List<SMObject>> feedback = new HashMap<String, List<SMObject>>();
 		Map<String, String> errMap = new HashMap<String, String>();
 
+		String sid;
+		String startIn;
+		String endIn;
+		
 		JSONParser parser = new JSONParser();
 		try {
 			Object obj = parser.parse(request.getBody());
 			JSONObject jsonObject = (JSONObject) obj;
 			
 			// Fetch the values passed in by the user from the body of JSON
-			String sid = (String) jsonObject.get("sid");
-			String startIn = (String) jsonObject.get("start");
-			String endIn = (String) jsonObject.get("end");
+			sid = (String) jsonObject.get("sid");
+			startIn = (String) jsonObject.get("start");
+			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
 			logger.error(pe.getMessage(), pe);
 			return Util.badRequestResponse(errMap);
