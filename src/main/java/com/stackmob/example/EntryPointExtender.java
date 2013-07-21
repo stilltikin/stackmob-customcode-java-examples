@@ -17,9 +17,6 @@
 package com.stackmob.example;
 
 import com.stackmob.example.crud.*;
-import com.stackmob.example.geopoints.*;
-import com.stackmob.example.relations.*;
-import com.stackmob.example.push.*;
 import com.stackmob.example.util.*;
 
 import com.stackmob.core.customcode.CustomCodeMethod;
