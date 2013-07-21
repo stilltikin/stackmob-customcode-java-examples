@@ -66,20 +66,13 @@ public class QueryByField implements CustomCodeMethod {
 			
 			// Fetch the values passed in by the user from the body of JSON
 			sid = (String) jsonObject.get("sid");
-		} catch (ParseException pe) {
-			//logger.error(pe.getMessage(), pe);
-			return Util.badRequestResponse(errMap);
-		}
-
-		// optional, don't bail on these
-		try {
 			startIn = (String) jsonObject.get("start");
 			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
 			//logger.error(pe.getMessage(), pe);
-			//return Util.badRequestResponse(errMap);
+			return Util.badRequestResponse(errMap);
 		}
-
+		
 		//String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
