@@ -12,11 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Modified 2013 by Rococo Essentials, LLC
  */
 
-package com.stackmob.lofifoto;
+package com.rococoessentials.lofifoto;
 
-import com.stackmob.lofifoto.external.*;
+import com.rococoessentials.lofifoto.external.*;
 
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.jar.JarEntryObject;

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.stackmob.lofifoto.external;
+package com.rococoessentials.lofifoto.external;
 
 import com.stackmob.core.InvalidSchemaException;
 import com.stackmob.core.DatastoreException;
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
 import com.stackmob.core.rest.ResponseToProcess;
-import com.stackmob.lofifoto.Util;
+import com.rococoessentials.lofifoto.Util;
 import com.stackmob.sdkapi.SDKServiceProvider;
 import com.stackmob.sdkapi.*;
 
