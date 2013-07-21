@@ -60,9 +60,9 @@ public class QueryByField implements CustomCodeMethod {
 		String endIn;
 		
 		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(request.getBody());
-		JSONObject jsonObject = (JSONObject) obj;
 		try {
+			Object obj = parser.parse(request.getBody());
+			JSONObject jsonObject = (JSONObject) obj;
 			
 			// Fetch the values passed in by the user from the body of JSON
 			sid = (String) jsonObject.get("sid");
@@ -77,7 +77,7 @@ public class QueryByField implements CustomCodeMethod {
 			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
 			//logger.error(pe.getMessage(), pe);
-			return Util.badRequestResponse(errMap);
+			//return Util.badRequestResponse(errMap);
 		}
 
 		//String sid = request.getParams().get("sid"); // get story ID
