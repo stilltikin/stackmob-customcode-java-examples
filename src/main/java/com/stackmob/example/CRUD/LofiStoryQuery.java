@@ -69,17 +69,14 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			startIn = (String) jsonObject.get("start");
 			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
-			//logger.error(pe.getMessage(), pe);
 			return Util.badRequestResponse(errMap);
 		}
 		
-		//String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
 
 		long start;
-//		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(startIn)) {
 			try {
 				start = Long.valueOf(startIn).longValue();
@@ -94,7 +91,6 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		}
 
 		long end;
-//		val = request.getParams().get("end");  // get photo end (optional)
 		if (!Util.hasNulls(endIn)) {
 			try {
 				end = Long.valueOf(endIn).longValue();
@@ -113,7 +109,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		ResultFilters p_resultFilter = new ResultFilters(start, end, p_order, p_fields);
 
 		List<SMOrdering> sa_order = Arrays.asList(new SMOrdering("last_updated", OrderingDirection.DESCENDING));
-		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "last_updated"); // TODO photoCount??
+		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "last_updated", "photocount");
 		ResultFilters sa_resultFilter = new ResultFilters(0, -1, sa_order, sa_fields);
 
 		List<SMCondition> p_query = new ArrayList<SMCondition>();
@@ -124,7 +120,6 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		List<SMObject> results;
 
 		try {
-			// get story info TODO: can't get photoCount for some reason??
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
 			s_query.add(new SMEquals("state", new SMString("N")));
 			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner", "photocount"));
