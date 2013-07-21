@@ -127,7 +127,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			// get story info TODO: can't get photoCount for some reason??
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
 			s_query.add(new SMEquals("state", new SMString("N")));
-			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner"));
+			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner", "photocount"));
 			
 			SMString userid;
 			if (results != null && results.size() > 0) {
