@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.stackmob.example.util;
+package com.stackmob.lofifoto.util;
 
 import com.stackmob.core.ServiceNotActivatedException;
 import com.stackmob.core.customcode.CustomCodeMethod;
