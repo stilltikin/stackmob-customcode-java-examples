@@ -42,7 +42,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 
 	@Override
 	public String getMethodName() {
-		return "CRUD_Query_By_Field";
+		return "LofiStoryQuery";
 	}
 
 	@Override
