@@ -25,9 +25,10 @@ import com.stackmob.example.Util;
 import com.stackmob.sdkapi.SDKServiceProvider;
 import com.stackmob.sdkapi.*;
 
-import org.json.simple.JSONObject;
+/*import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+*/
 
 import java.net.HttpURLConnection;
 import java.util.*;
@@ -62,7 +63,7 @@ public class QueryByField implements CustomCodeMethod {
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(request.getBody());
 		JSONObject jsonObject = (JSONObject) obj;
-		try {
+/*		try {
 			
 			// Fetch the values passed in by the user from the body of JSON
 			sid = (String) jsonObject.get("sid");
@@ -79,14 +80,14 @@ public class QueryByField implements CustomCodeMethod {
 			//logger.error(pe.getMessage(), pe);
 			return Util.badRequestResponse(errMap);
 		}
-
-		//String sid = request.getParams().get("sid"); // get story ID
+*/
+		String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
 
 		long start;
-//		String val = request.getParams().get("start");  // get photo start offset (optional)
+		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(startIn)) {
 			try {
 				start = Long.valueOf(startIn).longValue();
@@ -101,7 +102,7 @@ public class QueryByField implements CustomCodeMethod {
 		}
 
 		long end;
-//		val = request.getParams().get("end");  // get photo end (optional)
+		val = request.getParams().get("end");  // get photo end (optional)
 		if (!Util.hasNulls(endIn)) {
 			try {
 				end = Long.valueOf(endIn).longValue();
