@@ -110,11 +110,15 @@ public class LofiStoryQuery implements CustomCodeMethod {
 
 		List<SMOrdering> p_order = Arrays.asList(new SMOrdering("taken", OrderingDirection.ASCENDING));
 		List<String> p_fields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
+		ResultFilters p_resultFilter = new ResultFilters(start, end, p_order, p_fields);
 
-		ResultFilters resultFilter = new ResultFilters(start, end, p_order, p_fields);
+		List<SMOrdering> sa_order = Arrays.asList(new SMOrdering("last_updated", OrderingDirection.DESCENDING));
+		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "photoCount", "last_updated");
+		ResultFilters sa_resultFilter = new ResultFilters(0, -1, sa_order, sa_fields);
 
 		List<SMCondition> p_query = new ArrayList<SMCondition>();
 		List<SMCondition> s_query = new ArrayList<SMCondition>();
+		List<SMCondition> sa_query = new ArrayList<SMCondition>();
 		List<SMCondition> u_query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
 		List<SMObject> results;
@@ -122,7 +126,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		try {
 			// get story info TODO: can't get photoCount for some reason??
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
-			s_query.add(new SMNotEqual("state", new SMString("D")));
+			s_query.add(new SMEquals("state", new SMString("N")));
 			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner"));
 			
 			SMString userid;
@@ -143,10 +147,19 @@ public class LofiStoryQuery implements CustomCodeMethod {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
 
+			// Create a query condition to match all story objects except for the `sid` that was passed in
+			sa_query.add(new SMNotEqual("story_id", new SMString(sid)));
+			sa_query.add(new SMEquals("state", new SMString("N")));
+			results = ds.readObjects("stories", sa_query, 0, sa_resultFilter);
+
+			if (results != null && results.size() > 0) {
+				feedback.put("stories", results);
+			}
+
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			p_query.add(new SMEquals("story_id", new SMString(sid)));
-			p_query.add(new SMNotEqual("state", new SMString("D")));
-			results = ds.readObjects("photos", p_query, 0, resultFilter);
+			p_query.add(new SMEquals("state", new SMString("N")));
+			results = ds.readObjects("photos", p_query, 0, p_resultFilter);
 
 			if (results != null && results.size() > 0) {
 				feedback.put("photos", results);
