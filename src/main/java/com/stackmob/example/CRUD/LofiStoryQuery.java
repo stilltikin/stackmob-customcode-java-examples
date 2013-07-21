@@ -113,7 +113,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		ResultFilters p_resultFilter = new ResultFilters(start, end, p_order, p_fields);
 
 		List<SMOrdering> sa_order = Arrays.asList(new SMOrdering("last_updated", OrderingDirection.DESCENDING));
-		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "photoCount", "last_updated");
+		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "last_updated"); // TODO photoCount??
 		ResultFilters sa_resultFilter = new ResultFilters(0, -1, sa_order, sa_fields);
 
 		List<SMCondition> p_query = new ArrayList<SMCondition>();
