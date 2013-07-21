@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.stackmob.example.crud;
+package com.stackmob.lofifoto.public;
 
 import com.stackmob.core.InvalidSchemaException;
 import com.stackmob.core.DatastoreException;
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
 import com.stackmob.core.rest.ResponseToProcess;
-import com.stackmob.example.Util;
+import com.stackmob.lofifoto.Util;
 import com.stackmob.sdkapi.SDKServiceProvider;
 import com.stackmob.sdkapi.*;
 
@@ -38,11 +38,11 @@ import java.util.*;
  * that match the given story_id field
  */
 
-public class LofiStoryQuery implements CustomCodeMethod {
+public class QueryByField implements CustomCodeMethod {
 
 	@Override
 	public String getMethodName() {
-		return "LofiStoryQuery";
+		return "CRUD_Query_By_Field";
 	}
 
 	@Override
@@ -69,14 +69,17 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			startIn = (String) jsonObject.get("start");
 			endIn = (String) jsonObject.get("end");
 		} catch (ParseException pe) {
+			//logger.error(pe.getMessage(), pe);
 			return Util.badRequestResponse(errMap);
 		}
 		
+		//String sid = request.getParams().get("sid"); // get story ID
 		if (Util.hasNulls(sid)){
 			return Util.badRequestResponse(errMap);
 		}
 
 		long start;
+//		String val = request.getParams().get("start");  // get photo start offset (optional)
 		if (!Util.hasNulls(startIn)) {
 			try {
 				start = Long.valueOf(startIn).longValue();
@@ -91,6 +94,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		}
 
 		long end;
+//		val = request.getParams().get("end");  // get photo end (optional)
 		if (!Util.hasNulls(endIn)) {
 			try {
 				end = Long.valueOf(endIn).longValue();
@@ -106,23 +110,20 @@ public class LofiStoryQuery implements CustomCodeMethod {
 
 		List<SMOrdering> p_order = Arrays.asList(new SMOrdering("taken", OrderingDirection.ASCENDING));
 		List<String> p_fields = Arrays.asList("photos_id", "caption", "back", "width", "height", "photo", "taken");
-		ResultFilters p_resultFilter = new ResultFilters(start, end, p_order, p_fields);
 
-		List<SMOrdering> sa_order = Arrays.asList(new SMOrdering("last_updated", OrderingDirection.DESCENDING));
-		List<String> sa_fields = Arrays.asList("stories_id", "name", "desc", "photo", "last_updated", "photocount");
-		ResultFilters sa_resultFilter = new ResultFilters(0, -1, sa_order, sa_fields);
+		ResultFilters resultFilter = new ResultFilters(start, end, p_order, p_fields);
 
 		List<SMCondition> p_query = new ArrayList<SMCondition>();
 		List<SMCondition> s_query = new ArrayList<SMCondition>();
-		List<SMCondition> sa_query = new ArrayList<SMCondition>();
 		List<SMCondition> u_query = new ArrayList<SMCondition>();
 		DataService ds = serviceProvider.getDataService();
 		List<SMObject> results;
 
 		try {
+			// get story info TODO: can't get photoCount for some reason??
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
-			s_query.add(new SMEquals("state", new SMString("N")));
-			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner", "photocount"));
+			s_query.add(new SMNotEqual("state", new SMString("D")));
+			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner"));
 			
 			SMString userid;
 			if (results != null && results.size() > 0) {
@@ -142,20 +143,10 @@ public class LofiStoryQuery implements CustomCodeMethod {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
 
-			// Create a query condition to match all story objects except for the `sid` that was passed in
-			sa_query.add(new SMNotEqual("story_id", new SMString(sid)));
-			sa_query.add(new SMEquals("state", new SMString("N")));
-			sa_query.add(new SMEquals("sm_owner", userid));
-			results = ds.readObjects("stories", sa_query, 0, sa_resultFilter);
-
-			if (results != null && results.size() > 0) {
-				feedback.put("stories", results);
-			}
-
 			// Create a query condition to match all photo objects to the `sid` that was passed in
 			p_query.add(new SMEquals("story_id", new SMString(sid)));
-			p_query.add(new SMEquals("state", new SMString("N")));
-			results = ds.readObjects("photos", p_query, 0, p_resultFilter);
+			p_query.add(new SMNotEqual("state", new SMString("D")));
+			results = ds.readObjects("photos", p_query, 0, resultFilter);
 
 			if (results != null && results.size() > 0) {
 				feedback.put("photos", results);

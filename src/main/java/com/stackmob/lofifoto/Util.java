@@ -1,4 +1,4 @@
-package com.stackmob.example;
+package com.stackmob.lofifoto;
 
 import com.stackmob.core.rest.ResponseToProcess;
 

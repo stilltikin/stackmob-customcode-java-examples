@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.stackmob.example;
+package com.stackmob.lofifoto;
 
-import com.stackmob.example.crud.*;
-import com.stackmob.example.util.*;
+import com.stackmob.lofifoto.public.*;
+import com.stackmob.lofifoto.util.*;
 
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.jar.JarEntryObject;
