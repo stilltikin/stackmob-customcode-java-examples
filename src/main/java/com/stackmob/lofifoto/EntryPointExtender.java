@@ -16,7 +16,7 @@
 
 package com.stackmob.lofifoto;
 
-import com.stackmob.lofifoto.public.*;
+import com.stackmob.lofifoto.external.*;
 import com.stackmob.lofifoto.util.*;
 
 import com.stackmob.core.customcode.CustomCodeMethod;
