@@ -127,7 +127,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			}
 
 			// Create a query condition to match all story objects except for the `sid` that was passed in
-			sa_query.add(new SMNotEqual("story_id", new SMString(sid)));
+			sa_query.add(new SMNotEqual("stories_id", new SMString(sid)));
 			sa_query.add(new SMEquals("state", new SMString("N")));
 			sa_query.add(new SMEquals("sm_owner", userid));
 			results = ds.readObjects("stories", sa_query, 0, sa_resultFilter);
