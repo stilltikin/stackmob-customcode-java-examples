@@ -21,14 +21,14 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.stackmob</groupId>
-  <artifactId>java-example</artifactId>
+  <artifactId>lofifoto</artifactId>
   <packaging>jar</packaging>
   <version>0.1.0-SNAPSHOT</version>
  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <customcode.version>0.5.3</customcode.version>
+    <customcode.version>1.0</customcode.version>
   </properties>
     
   <dependencies>
