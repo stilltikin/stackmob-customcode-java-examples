@@ -75,7 +75,7 @@
             <configuration>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.stackmob.example.EntryPointExtender</mainClass>
+                  <mainClass>com.rococoessentials.lofifoto.EntryPointExtender</mainClass>
                 </transformer>
               </transformers>
               <createDependencyReducedPom>false</createDependencyReducedPom>
