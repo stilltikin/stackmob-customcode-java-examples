@@ -73,6 +73,8 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		} else {
 			start = 0;
 		}
+		
+		// WTF??
 
 		long end;
 		if (!Util.hasNulls(endIn)) {
