@@ -119,9 +119,9 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			// get user info
 			u_query.add(new SMEquals("sm_owner", userid));
 			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot"));
-			return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			if (results != null && results.size() > 0) {
 				feedback.put("user", results);
+				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			} else {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
