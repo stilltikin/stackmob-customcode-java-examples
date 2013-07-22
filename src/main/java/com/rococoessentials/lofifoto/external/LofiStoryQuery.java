@@ -126,6 +126,24 @@ public class LofiStoryQuery implements CustomCodeMethod {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
 
+			// Create a query condition to match all story objects except for the `sid` that was passed in
+			sa_query.add(new SMNotEqual("story_id", new SMString(sid)));
+			sa_query.add(new SMEquals("state", new SMString("N")));
+			sa_query.add(new SMEquals("sm_owner", userid));
+			results = ds.readObjects("stories", sa_query, 0, sa_resultFilter);
+
+			if (results != null && results.size() > 0) {
+				feedback.put("stories", results);
+			}
+
+			// Create a query condition to match all photo objects to the `sid` that was passed in
+			p_query.add(new SMEquals("story_id", new SMString(sid)));
+			p_query.add(new SMEquals("state", new SMString("N")));
+			results = ds.readObjects("photos", p_query, 0, p_resultFilter);
+
+			if (results != null && results.size() > 0) {
+				feedback.put("photos", results);
+			}
 
 		} catch (InvalidSchemaException ise) {
 			return Util.internalErrorResponse("invalid_schema", ise, errMap);	// http 500 - internal server error
@@ -133,5 +151,6 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			return Util.internalErrorResponse("datastore_exception", dse, errMap);	// http 500 - internal server error
 		}
 
+		return new ResponseToProcess(HttpURLConnection.HTTP_OK, feedback);
 	}
 }
