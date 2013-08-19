@@ -106,8 +106,9 @@ public class LofiStoryQuery implements CustomCodeMethod {
 		List<SMObject> results;
 
 		try {
+			// get requested story, unless deleted
 			s_query.add(new SMEquals("stories_id", new SMString(sid)));
-			s_query.add(new SMEquals("state", new SMString("N")));
+			s_query.add(new SMNotEqual("state", new SMString("D")));
 			results = ds.readObjects("stories", s_query, Arrays.asList("last_updated", "name", "desc", "photo", "sm_owner", "photocount"));
 			
 			SMString userid;
@@ -128,7 +129,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
 			}
 
-			// Create a query condition to match all story objects except for the `sid` that was passed in
+			// Create a query condition to match all story objects except for the `sid` that was passed in.  Ignores stories where state == 'H' (hidden)
 			sa_query.add(new SMNotEqual("stories_id", new SMString(sid)));
 			sa_query.add(new SMEquals("state", new SMString("N")));
 			sa_query.add(new SMEquals("sm_owner", userid));
