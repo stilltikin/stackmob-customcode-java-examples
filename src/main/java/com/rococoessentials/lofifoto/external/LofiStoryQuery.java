@@ -121,9 +121,16 @@ public class LofiStoryQuery implements CustomCodeMethod {
 
 			// get user info
 			u_query.add(new SMEquals("sm_owner", userid));
-			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot"));
+			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot", "fbID"));
 			
 			if (results != null && results.size() > 0) {
+				SMObject fbIDObj = (SMObject) results.get(0).getValue();
+				SMString fbID = (SMString) fbIDObj.get("fbID");
+				if(fbID != null) {
+					feedback.put("FBID_test", "TRUE");
+				} else {
+					feedback.put("FBID_test", "FALSE");					
+				}
 				feedback.put("user", results);
 			} else {
 				return Util.internalErrorResponse("no matching user for story", new DatastoreException(userid.toString()), errMap);	// http 500 - internal server error
