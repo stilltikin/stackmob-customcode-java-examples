@@ -119,7 +119,7 @@ public class LofiStoryQuery implements CustomCodeMethod {
 
 			// get user info
 			u_query.add(new SMEquals("sm_owner", userid));
-			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot", "fbID"));
+			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot", "fbid"));
 			
 			if (results != null && results.size() > 0) {
 /*				SMObject userObj = (SMObject) results.get(0);
