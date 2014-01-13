@@ -124,12 +124,11 @@ public class LofiStoryQuery implements CustomCodeMethod {
 			results = ds.readObjects("user", u_query, Arrays.asList("username", "fullname", "mugshot", "fbID"));
 			
 			if (results != null && results.size() > 0) {
-				SMObject fbIDObj = (SMObject) results.get(0);
-				SMString fbID = (SMString) fbIDObj.getValue().get("fbID");
+				SMObject userObj = (SMObject) results.get(0);
+				SMString fbID = (SMString) userObj.getValue().get("fbID");
+				SMString username = (SMString) userObj.getValue().get("username");
 				if(fbID != null) {
-					feedback.put("FBID_test", "TRUE");
-				} else {
-					feedback.put("FBID_test", "FALSE");
+					userObj.getValue().set("username", fbID);
 				}
 				feedback.put("user", results);
 			} else {
