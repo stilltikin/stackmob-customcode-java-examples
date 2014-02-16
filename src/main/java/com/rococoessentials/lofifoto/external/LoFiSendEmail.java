@@ -118,7 +118,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			return new ResponseToProcess(HttpURLConnection.HTTP_BAD_REQUEST, errParams); // http 400 - bad request
 		}
     	
-		logger.debug("Parsed args");
+		logger.debug("Parsed args: s=" + subject + " h=" + html + " f=" + from);
 
 		// get the StackMob datastore service and assemble the query
 		DataService dataService = serviceProvider.getDataService();
@@ -132,10 +132,13 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		try {
 			// return results from user query
 			result = dataService.readObjects("user", query);
-			logger.debug("Queried DB");
+			logger.debug("Queried DB for " + username);
 			if (result != null && result.size() == 1) {
 				logger.debug("Retrieved data");
 				userObject = result.get(0);
+				if(userObject == null) {
+					logger.error("Failed to retrieve data for username = " + username);
+				}
 				to = userObject.getValue().get("email").toString();
 				toname = userObject.getValue().get("fullname").toString();
 			} else {
