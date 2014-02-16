@@ -33,6 +33,7 @@ public class EntryPointExtender extends JarEntryObject {
     List<CustomCodeMethod> list = new ArrayList<CustomCodeMethod>();
     list.add(new QueryByField());
 	list.add(new LofiStoryQuery());
+	list.add(new SendEmail());
 
     return list;
   }
