@@ -38,8 +38,6 @@ import com.stackmob.sdkapi.http.request.PostRequest;
 import com.stackmob.sdkapi.http.Header;
 import com.stackmob.sdkapi.LoggerService;
 
-import com.rococoessentials.lofifoto.Util;
-
 import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,6 +56,8 @@ import org.json.simple.parser.ParseException;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
+import com.rococoessentials.lofifoto.Util;
+
 public class LoFiSendEmail implements CustomCodeMethod {
 	
 	//Create your SendGrid Acct at sendgrid.com
@@ -66,7 +66,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 	
 	@Override
 	public String getMethodName() {
-		return "send_email";
+		return "LoFiSendEmail";
 	}
     
     
