@@ -107,7 +107,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			html = (String) jsonObject.get("html");
 			from = (String) jsonObject.get("from");
 		} catch (ParseException e) {
-			logger.error(e.getMessage(), e);
+			logger.error("Failed to parse arguments: " + e.getMessage(), e);
 			responseCode = -1;
 			responseBody = e.getMessage();
 		}
@@ -133,7 +133,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			if (result != null && result.size() == 1) {
 				userObject = result.get(0);
 				to = userObject.getValue().get("email").toString();
-				toname = userObject.getValue().get("name").toString();
+				toname = userObject.getValue().get("fullname").toString();
 			} else {
 				HashMap<String, String> errMap = new HashMap<String, String>();
 				errMap.put("error", "no user found");
