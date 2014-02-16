@@ -167,6 +167,8 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			logger.error("Subject is missing");
 		}
 		
+		logger.debug("Encoding args");
+
 		//Encode any parameters that need encoding (i.e. subject, toname, html)
 		try {
 			subject = URLEncoder.encode(subject, "UTF-8");
@@ -188,14 +190,18 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		set.add(accept);
 		set.add(content);
 		
+		logger.debug("Setting up HTTP post");
+
 		try {
 			HttpService http = serviceProvider.getHttpService();
 			
 			PostRequest req = new PostRequest(url,set,body);
 			
 			HttpResponse resp = http.post(req);
+			logger.debug("Sent post");
 			responseCode = resp.getCode();
 			responseBody = resp.getBody();
+			logger.debug("Retrieved post resp");
 			
 		} catch(TimeoutException e) {
 			logger.error(e.getMessage(), e);
