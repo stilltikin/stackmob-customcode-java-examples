@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.stackmob.example;
+package com.rococoessentials.lofifoto.external;
 
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
