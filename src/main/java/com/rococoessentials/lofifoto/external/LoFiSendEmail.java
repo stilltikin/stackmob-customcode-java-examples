@@ -100,8 +100,8 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			
 			//We use the username passed to query the StackMob datastore
 			//and retrieve the user's name and email address
-			username = (String) jsonObject.get("username");
-			
+			username = (String) request.getLoggedInUser();//jsonObject.get("username");
+
 			// The following values could be static or dynamic
 			subject = (String) jsonObject.get("subject");
 			html = (String) jsonObject.get("html");
@@ -134,17 +134,23 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			if (result != null && result.size() == 1) {
 				logger.debug("Retrieved data");
 				userObject = result.get(0);
-				if(userObject == null) {
-					logger.error("Failed to retrieve data for username = " + username);
+				
+				if(userObject.getValue().get("email") == null || userObject.getValue().get("email").isEmpty()) {
+					logger.error("Missing email for " + username);
+					HashMap<String, String> errParams = new HashMap<String, String>();
+					errParams.put("error", "missing email address");
+					return new ResponseToProcess(HttpURLConnection.HTTP_BAD_REQUEST, errParams); // http 400 - bad request
 				} else {
-					logger.debug("Retrieved: " + userObject.getValue().toString());
+					to = userObject.getValue().get("email").toString();
 				}
-				to = userObject.getValue().get("email").toString();
-				if(userObject.getValue().get("fullname") != null) {
+				
+				if(userObject.getValue().get("fullname") == null || userObject.getValue().get("fullname").isEmpty()) {
+					logger.info("Missing fullname for " + username);
+				} else {
 					toname = userObject.getValue().get("fullname").toString();
 				}
 			} else {
-				logger.debug("Failed to retrieve data");
+				logger.debug("Failed to retrieve data for " + username);
 				HashMap<String, String> errMap = new HashMap<String, String>();
 				errMap.put("error", "no user found");
 				errMap.put("detail", "no matches for the username passed");
