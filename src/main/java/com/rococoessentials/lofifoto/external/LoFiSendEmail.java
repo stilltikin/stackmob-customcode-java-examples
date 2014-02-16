@@ -91,7 +91,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		
 		LoggerService logger = serviceProvider.getLoggerService(LoFiSendEmail.class);
 		//Log the JSON object passed to the StackMob Logs
-		logger.debug(request.getBody());
+		//logger.debug(request.getBody());
 		
 		JSONParser parser = new JSONParser();
 		try {
@@ -109,7 +109,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		} catch (ParseException e) {
 			logger.error("Failed to parse arguments: " + e.getMessage(), e);
 			responseCode = -1;
-			responseBody = e.getMessage();
+			responseBody = "Failed to parse arguments: " + e.getMessage();
 		}
 		
 		if (username == null || username.isEmpty()) {
@@ -118,6 +118,8 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			return new ResponseToProcess(HttpURLConnection.HTTP_BAD_REQUEST, errParams); // http 400 - bad request
 		}
     	
+		logger.debug("Parsed args");
+
 		// get the StackMob datastore service and assemble the query
 		DataService dataService = serviceProvider.getDataService();
 		
@@ -130,11 +132,14 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		try {
 			// return results from user query
 			result = dataService.readObjects("user", query);
+			logger.debug("Queried DB");
 			if (result != null && result.size() == 1) {
+				logger.debug("Retrieved data");
 				userObject = result.get(0);
 				to = userObject.getValue().get("email").toString();
 				toname = userObject.getValue().get("fullname").toString();
 			} else {
+				logger.debug("Failed to retrieve data");
 				HashMap<String, String> errMap = new HashMap<String, String>();
 				errMap.put("error", "no user found");
 				errMap.put("detail", "no matches for the username passed");
