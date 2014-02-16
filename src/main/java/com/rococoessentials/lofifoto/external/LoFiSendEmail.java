@@ -130,9 +130,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		try {
 			// return results from user query
 			result = dataService.readObjects("user", query);
-			logger.debug("Queried DB for " + username);
 			if (result != null && result.size() == 1) {
-				logger.debug("Retrieved data");
 				userObject = result.get(0);
 				
 				if(userObject.getValue().get("email") == null) {
@@ -150,10 +148,10 @@ public class LoFiSendEmail implements CustomCodeMethod {
 					toname = userObject.getValue().get("fullname").toString();
 				}
 			} else {
-				logger.debug("Failed to retrieve data for " + username);
+				logger.error("Failed to retrieve data for " + username);
 				HashMap<String, String> errMap = new HashMap<String, String>();
-				errMap.put("error", "no user found");
-				errMap.put("detail", "no matches for the username passed");
+				errMap.put("error", "Query failed");
+				errMap.put("detail", "Failed to retrieve data for " + username);
 				return new ResponseToProcess(HttpURLConnection.HTTP_OK, errMap); // http 500 - internal server error
 			}
 			
@@ -178,8 +176,6 @@ public class LoFiSendEmail implements CustomCodeMethod {
 			logger.error("Subject is missing");
 		}
 		
-		logger.debug("Encoding args");
-
 		//Encode any parameters that need encoding (i.e. subject, toname, html)
 		try {
 			subject = URLEncoder.encode(subject, "UTF-8");
@@ -201,18 +197,14 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		set.add(accept);
 		set.add(content);
 		
-		logger.debug("Setting up HTTP post");
-
 		try {
 			HttpService http = serviceProvider.getHttpService();
 			
 			PostRequest req = new PostRequest(url,set,body);
 			
 			HttpResponse resp = http.post(req);
-			logger.debug("Sent post");
 			responseCode = resp.getCode();
 			responseBody = resp.getBody();
-			logger.debug("Retrieved post resp");
 			
 		} catch(TimeoutException e) {
 			logger.error(e.getMessage(), e);
@@ -237,7 +229,9 @@ public class LoFiSendEmail implements CustomCodeMethod {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("response_body", responseBody);
-		
+
+		logger.debug("Sent welcome email to " + username);
+
 		return new ResponseToProcess(responseCode, map);
 	}
 }
