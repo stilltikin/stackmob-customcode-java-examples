@@ -58,7 +58,7 @@ import org.json.simple.parser.ParseException;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
-public class SendEmail implements CustomCodeMethod {
+public class LoFiSendEmail implements CustomCodeMethod {
 	
 	//Create your SendGrid Acct at sendgrid.com
     static String API_USER = "stackmob_fqQLkk3y55cZQqxKWcuUCQ@stackmob.com";
@@ -89,7 +89,7 @@ public class SendEmail implements CustomCodeMethod {
 		String body = "";
 		String url = "";
 		
-		LoggerService logger = serviceProvider.getLoggerService(SendEmail.class);
+		LoggerService logger = serviceProvider.getLoggerService(LoFiSendEmail.class);
 		//Log the JSON object passed to the StackMob Logs
 		logger.debug(request.getBody());
 		
