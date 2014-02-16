@@ -135,7 +135,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 				logger.debug("Retrieved data");
 				userObject = result.get(0);
 				
-				if(userObject.getValue().get("email") == null || userObject.getValue().get("email").isEmpty()) {
+				if(userObject.getValue().get("email") == null) {
 					logger.error("Missing email for " + username);
 					HashMap<String, String> errParams = new HashMap<String, String>();
 					errParams.put("error", "missing email address");
@@ -144,7 +144,7 @@ public class LoFiSendEmail implements CustomCodeMethod {
 					to = userObject.getValue().get("email").toString();
 				}
 				
-				if(userObject.getValue().get("fullname") == null || userObject.getValue().get("fullname").isEmpty()) {
+				if(userObject.getValue().get("fullname") == null) {
 					logger.info("Missing fullname for " + username);
 				} else {
 					toname = userObject.getValue().get("fullname").toString();
